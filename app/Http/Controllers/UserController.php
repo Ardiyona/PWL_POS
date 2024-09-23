@@ -18,7 +18,7 @@ class UserController extends Controller
         ];
         UserModel::insert($data);  // Tambahkan data ke tabel m_user */
 
-        // Tambah data dengan Equolent Model
+        /* // Tambah data dengan Equolent Model
         $data = [
             'nama' => 'Pelanggan Pertama',
         ];
@@ -26,6 +26,17 @@ class UserController extends Controller
 
         // Coba akses model user
         $user = UserModel::all(); // Ambil semua data dari tabel m_user
+        return view('user', ['data' => $user]); */
+
+        $data = [
+            'level_id' => 2,
+            'username' => 'manager_tiga',
+            'nama' => 'Manager 3',
+            'password' => Hash::make('12345')
+        ];
+        UserModel::create($data);
+
+        $user = UserModel::all();
         return view('user', ['data' => $user]);
     }
 }
