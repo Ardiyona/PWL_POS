@@ -51,10 +51,18 @@ class UserController extends Controller
         /* $user = UserModel::firstwhere('level_id', 1); // Kode ini biasanya digunakan untuk mengambil data berdasarkan satu kondisi saja
         return view('user', ['data' => $user]); */
 
-        //Moteode FindOr
-        $user = UserModel::findOr(20, ['username', 'nama'], function() {
+        // Metode FindOr
+        /* $user = UserModel::findOr(20, ['username', 'nama'], function() {
             abort(404);
         });
+        return view('user', ['data' => $user]); */
+
+        // Metode FindOrFail
+        /* $user = UserModel::findOrFail(1);
+        return view('user', ['data' => $user]); */
+
+        // Metode FirstOrFail
+        $user = UserModel::where('username', 'manager9')->firstOrFail();
         return view('user', ['data' => $user]);
     }
 }
