@@ -21,7 +21,7 @@
                 </tr>
             @endforeach
         </table> --}}
-        <table border="1" cellpadding="1" cellspacing="1">
+        {{-- <table border="1" cellpadding="1" cellspacing="1">
             <tr>
                 <th>ID</th>
                 <th>Username</th>
@@ -33,6 +33,14 @@
                 <td>{{ $data->username}}</td>
                 <td>{{ $data->nama}}</td>
                 <td>{{ $data->level_id}}</td>
+            </tr>
+        </table> --}}
+        <table border="1" cellpadding="1" cellspacing="1">
+            <tr>
+                <th>Jumlah Pengguna</th>
+            </tr>
+            <tr>
+                <td>{{$data}}</td>
             </tr>
         </table>
     </body>
