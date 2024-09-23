@@ -28,7 +28,8 @@ class UserController extends Controller
         $user = UserModel::all(); // Ambil semua data dari tabel m_user
         return view('user', ['data' => $user]); */
 
-        $data = [
+        // Pertemuan4 - Praktikum1
+        /* $data = [
             'level_id' => 2,
             'username' => 'manager_tiga',
             'nama' => 'Manager 3',
@@ -37,6 +38,23 @@ class UserController extends Controller
         UserModel::create($data);
 
         $user = UserModel::all();
+        return view('user', ['data' => $user]); */
+
+        // Metode Find
+        /* $user = UserModel::find(1);
+        return view('user', ['data' => $user]); */
+
+        // Metode First
+        /* $user = UserModel::where('level_id', 1)->first();
+        return view('user', ['data' => $user]); */
+        
+        /* $user = UserModel::firstwhere('level_id', 1); // Kode ini biasanya digunakan untuk mengambil data berdasarkan satu kondisi saja
+        return view('user', ['data' => $user]); */
+
+        //Moteode FindOr
+        $user = UserModel::findOr(20, ['username', 'nama'], function() {
+            abort(404);
+        });
         return view('user', ['data' => $user]);
     }
 }
