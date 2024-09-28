@@ -22,8 +22,10 @@ class UserController extends Controller
         ];
     
         $activeMenu = 'user'; //set menu yang sedang aktif
+
+        $level = LevelModel::all(); // ambil data level untuk filter level
     
-        return view('user.index',['breadcrumb'=>$breadcrumb, 'page' => $page, 'activeMenu'=>$activeMenu]);
+        return view('user.index',['breadcrumb'=>$breadcrumb, 'page' => $page, 'level' => $level, 'activeMenu'=>$activeMenu]);
     }
 
     //Ambil data user dalam bentuk json untuk datables
