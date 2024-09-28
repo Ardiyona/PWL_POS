@@ -28,7 +28,7 @@ class UserController extends Controller
         return view('user.index',['breadcrumb'=>$breadcrumb, 'page' => $page, 'level' => $level, 'activeMenu'=>$activeMenu]);
     }
 
-    //Ambil data user dalam bentuk json untuk datables
+    // Ambil data user dalam bentuk json untuk datables
     public function list(Request $request) {
         $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
             ->with('level');
@@ -55,7 +55,7 @@ class UserController extends Controller
     // Menampilkan halaman form tambah user
     public function create() {
         $breadcrumb = (object) [
-            'title' => 'Tambah user',
+            'title' => 'Tambah User',
             'list' => ['Home', ' User', 'Tambah'],
         ];
 
@@ -94,7 +94,7 @@ class UserController extends Controller
         $user = UserModel::with('level')-> find($id);
 
         $breadcrumb = (object) [
-            'title' => 'Detail user',
+            'title' => 'Detail User',
             'list' => ['Home', ' User', 'Detail'],
         ];
 
@@ -113,7 +113,7 @@ class UserController extends Controller
         $level = LevelModel::all();
 
         $breadcrumb = (object) [
-            'title' => 'Edit user',
+            'title' => 'Edit User',
             'list' => ['Home', ' User', 'Edit'],
         ];
 
