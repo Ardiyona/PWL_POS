@@ -21,7 +21,6 @@
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
               Dashboard
-              <i class="right fas fa-angle-left"></i>
             </p>
           </a>
         </li>
