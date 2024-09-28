@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -28,4 +29,15 @@ Route::group(['prefix' => 'level'], function() {
     Route::get('/{id}/edit', [LevelController::class, 'edit']);  // menampilkan halaman form edit level
     Route::put('/{id}', [LevelController::class, 'update']);     // menyimpan perubahan data level
     Route::delete('/{id}', [LevelController::class, 'destroy']); // menghapus data level
+});
+
+Route::group(['prefix' => 'kategori'], function() {
+    Route::get('/', [KategoriController::class, 'index']);          // menampilkan halaman awal kategori
+    Route::Post('/list', [KategoriController::class, 'list']);      // menampilkan data kategori
+    Route::get('/create', [KategoriController::class, 'create']);   // menampilkan halaman form tambah kategori
+    Route::post('/', [KategoriController::class, 'store']);         // menyimpan data kategori baru
+    Route::get('/{id}', [KategoriController::class, 'show']);       // menampilkan detail kategori
+    Route::get('/{id}/edit', [KategoriController::class, 'edit']);  // menampilkan halaman form edit kategori
+    Route::put('/{id}', [KategoriController::class, 'update']);     // menyimpan perubahan data kategori
+    Route::delete('/{id}', [KategoriController::class, 'destroy']); // menghapus data kategori
 });
