@@ -221,9 +221,6 @@ class LevelController extends Controller
             }
             $check = LevelModel::find($id);
             if ($check) {
-                if(!$request->filled('password') ){ // jika password tidak diisi, maka hapus dari request
-                    $request->request->remove('password');
-                }
                 $check->update($request->all());
                 return response()->json([
                     'status' => true,
