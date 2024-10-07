@@ -37,7 +37,7 @@ Route::middleware(['auth'])->group(function(){
         Route::delete('/{id}', [UserController::class, 'destroy']); // menghapus data user
     });
     
-    Route::group(['prefix' => 'level'], function() {
+    /* Route::group(['prefix' => 'level'], function() {
         Route::get('/', [LevelController::class, 'index']);          // menampilkan halaman awal level
         Route::Post('/list', [LevelController::class, 'list']);      // menampilkan data level
         Route::get('/create', [LevelController::class, 'create']);   // menampilkan halaman form tambah level
@@ -53,6 +53,19 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/{id}/confirm_ajax', [LevelController::class, 'confirm_ajax']); // untuk tampilan form confirm delete level ajax
         Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']); // menghapus data level ajax
         Route::delete('/{id}', [LevelController::class, 'destroy']); // menghapus data level
+    }); */
+
+    Route::middleware(['authorize:ADM'])->group(function() {
+        Route::get('/level', [LevelController::class, 'index']);          // menampilkan halaman awal level
+        Route::Post('/level/list', [LevelController::class, 'list']);      // menampilkan data level
+        Route::get('/level/create_ajax', [LevelController::class, 'create_ajax']); // menampilkan halaman form tambah level ajax
+        Route::post('level//ajax', [LevelController::class, 'store_ajax']);        // menyimpan data level baru ajax
+        Route::get('/level/{id}/show_ajax', [LevelController::class, 'show_ajax']);    // menampilkan halaman awal level ajax
+        Route::get('/level/{id}', [LevelController::class, 'show']);       // menampilkan detail level
+        Route::get('/level/{id}/edit_ajax', [LevelController::class, 'edit_ajax']);     // menampilkan halaman form edit level ajax
+        Route::put('/level/{id}/update_ajax', [LevelController::class, 'update_ajax']); // menyimpan perubahan data level ajax
+        Route::get('/level/{id}/confirm_ajax', [LevelController::class, 'confirm_ajax']); // untuk tampilan form confirm delete level ajax
+        Route::delete('/level/{id}/delete_ajax', [LevelController::class, 'delete_ajax']); // menghapus data level ajax
     });
     
     Route::group(['prefix' => 'kategori'], function() {
