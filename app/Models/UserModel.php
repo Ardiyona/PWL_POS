@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Yajra\DataTables\Html\Editor\Fields\Hidden;
+use Illuminate\Foundation\Auth\User as Authenticable;
 
-class UserModel extends Model
+class UserModel extends Authenticable
 {
     use HasFactory;
 
