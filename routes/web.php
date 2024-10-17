@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
@@ -90,5 +91,12 @@ Route::middleware(['auth'])->group(function(){
         Route::post('/barang/import_ajax', [BarangController::class, 'import_ajax']);   // ajax import excel
         Route::get('/barang/export_excel', [BarangController::class, 'export_excel']);   // export excel
         Route::get('/barang/export_pdf', [BarangController::class, 'export_pdf']);   // export pdf
+    });
+
+    // Menu Profile
+    Route::middleware(['authorize:ADM,MNG,STF,CUS'])->group(function() {
+        Route::get('/profile', [ProfileController::class, 'index']);          // menampilkan halaman awal barang
+        Route::get('/profile/{id}/upload', [ProfileController::class, 'upload']);  // ajax form upload excel
+        Route::post('/profile/{id}/upload_ajax', [ProfileController::class, 'upload_ajax'])->name('editProfile');   // ajax import excel
     });
 });
