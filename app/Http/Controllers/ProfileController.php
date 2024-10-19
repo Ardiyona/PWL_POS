@@ -70,7 +70,7 @@ class ProfileController extends Controller
                 }
     
                 if ($request->hasFile('foto')) {
-                    $foto = $request->file('foto')->getClientOriginalName();
+                    $foto = time() . '_' . $request->file('foto')->getClientOriginalName();
                     $request->file('foto')->storeAs('public/images/', $foto);
                     $check->update([
                         'username' => $request->username,
