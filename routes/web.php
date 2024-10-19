@@ -6,6 +6,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\StokController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -20,16 +21,16 @@ Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
-Route::middleware(['auth'])->group(function(){
+Route::middleware(['auth'])->group(function () {
 
     Route::get('/', [WelcomeController::class, 'index']);
 
     // Menu User
-    Route::middleware(['authorize:ADM'])->group(function() {
+    Route::middleware(['authorize:ADM'])->group(function () {
         Route::get('/user', [UserController::class, 'index']);          // menampilkan halaman awal user
         Route::Post('/user/list', [UserController::class, 'list']);      // menampilkan data user
         Route::get('/user/create_ajax', [UserController::class, 'create_ajax']); // menampilkan halaman form tambah user ajax
-        Route::post('user//ajax', [UserController::class, 'store_ajax']);        // menyimpan data user baru ajax
+        Route::post('user/ajax', [UserController::class, 'store_ajax']);        // menyimpan data user baru ajax
         Route::get('/user/{id}/show_ajax', [UserController::class, 'show_ajax']);    // menampilkan halaman awal user ajax
         Route::get('/user/{id}/edit_ajax', [UserController::class, 'edit_ajax']);     // menampilkan halaman form edit user ajax
         Route::put('/user/{id}/update_ajax', [UserController::class, 'update_ajax']); // menyimpan perubahan data user ajax
@@ -38,11 +39,11 @@ Route::middleware(['auth'])->group(function(){
     });
 
     // Menu Level
-    Route::middleware(['authorize:ADM'])->group(function() {
+    Route::middleware(['authorize:ADM'])->group(function () {
         Route::get('/level', [LevelController::class, 'index']);          // menampilkan halaman awal level
         Route::Post('/level/list', [LevelController::class, 'list']);      // menampilkan data level
         Route::get('/level/create_ajax', [LevelController::class, 'create_ajax']); // menampilkan halaman form tambah level ajax
-        Route::post('level//ajax', [LevelController::class, 'store_ajax']);        // menyimpan data level baru ajax
+        Route::post('level/ajax', [LevelController::class, 'store_ajax']);        // menyimpan data level baru ajax
         Route::get('/level/{id}/show_ajax', [LevelController::class, 'show_ajax']);    // menampilkan halaman awal level ajax
         Route::get('/level/{id}/edit_ajax', [LevelController::class, 'edit_ajax']);     // menampilkan halaman form edit level ajax
         Route::put('/level/{id}/update_ajax', [LevelController::class, 'update_ajax']); // menyimpan perubahan data level ajax
@@ -51,11 +52,11 @@ Route::middleware(['auth'])->group(function(){
     });
 
     // Menu Kategori
-    Route::middleware(['authorize:ADM,MNG,STF'])->group(function() {
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
         Route::get('/kategori', [KategoriController::class, 'index']);          // menampilkan halaman awal kategori
         Route::Post('/kategori/list', [KategoriController::class, 'list']);      // menampilkan data kategori
         Route::get('/kategori/create_ajax', [KategoriController::class, 'create_ajax']); // menampilkan halaman form tambah kategori ajax
-        Route::post('kategori//ajax', [KategoriController::class, 'store_ajax']);        // menyimpan data kategori baru ajax
+        Route::post('kategori/ajax', [KategoriController::class, 'store_ajax']);        // menyimpan data kategori baru ajax
         Route::get('/kategori/{id}/show_ajax', [KategoriController::class, 'show_ajax']);    // menampilkan halaman awal kategori ajax
         Route::get('/kategori/{id}/edit_ajax', [KategoriController::class, 'edit_ajax']);     // menampilkan halaman form edit kategori ajax
         Route::put('/kategori/{id}/update_ajax', [KategoriController::class, 'update_ajax']); // menyimpan perubahan data kategori ajax
@@ -64,11 +65,11 @@ Route::middleware(['auth'])->group(function(){
     });
 
     // Menu Supplier
-    Route::middleware(['authorize:ADM,MNG'])->group(function() {
+    Route::middleware(['authorize:ADM,MNG'])->group(function () {
         Route::get('/supplier', [SupplierController::class, 'index']);          // menampilkan halaman awal supplier
         Route::Post('/supplier/list', [SupplierController::class, 'list']);      // menampilkan data supplier
         Route::get('/supplier/create_ajax', [SupplierController::class, 'create_ajax']); // menampilkan halaman form tambah supplier ajax
-        Route::post('supplier//ajax', [SupplierController::class, 'store_ajax']);        // menyimpan data supplier baru ajax
+        Route::post('supplier/ajax', [SupplierController::class, 'store_ajax']);        // menyimpan data supplier baru ajax
         Route::get('/supplier/{id}/show_ajax', [SupplierController::class, 'show_ajax']);    // menampilkan halaman awal supplier ajax
         Route::get('/supplier/{id}/edit_ajax', [SupplierController::class, 'edit_ajax']);     // menampilkan halaman form edit supplier ajax
         Route::put('/supplier/{id}/update_ajax', [SupplierController::class, 'update_ajax']); // menyimpan perubahan data supplier ajax
@@ -77,7 +78,7 @@ Route::middleware(['auth'])->group(function(){
     });
 
     // Menu Barang
-    Route::middleware(['authorize:ADM,MNG,STF,CUS'])->group(function() {
+    Route::middleware(['authorize:ADM,MNG,STF,CUS'])->group(function () {
         Route::get('/barang', [BarangController::class, 'index']);          // menampilkan halaman awal barang
         Route::Post('/barang/list', [BarangController::class, 'list']);      // menampilkan data barang
         Route::get('/barang/create_ajax', [BarangController::class, 'create_ajax']); // menampilkan halaman form tambah barang ajax
@@ -94,9 +95,22 @@ Route::middleware(['auth'])->group(function(){
     });
 
     // Menu Profile
-    Route::middleware(['authorize:ADM,MNG,STF,CUS'])->group(function() {
+    Route::middleware(['authorize:ADM,MNG,STF,CUS'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'index']);          // menampilkan halaman awal barang
         Route::get('/profile/{id}/upload', [ProfileController::class, 'upload']);  // ajax form upload excel
         Route::post('/profile/{id}/upload_ajax', [ProfileController::class, 'upload_ajax'])->name('editProfile');   // ajax import excel
+    });
+
+    // Menu stok
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+        Route::get('/stok', [StokController::class, 'index']);          // menampilkan halaman awal stok
+        Route::Post('/stok/list', [StokController::class, 'list']);      // menampilkan data stok
+        Route::get('/stok/create_ajax', [StokController::class, 'create_ajax']); // menampilkan halaman form tambah stok ajax
+        Route::post('stok/ajax', [StokController::class, 'store_ajax']);        // menyimpan data stok baru ajax
+        Route::get('/stok/{id}/show_ajax', [StokController::class, 'show_ajax']);    // menampilkan halaman awal stok ajax
+        Route::get('/stok/{id}/edit_ajax', [StokController::class, 'edit_ajax']);     // menampilkan halaman form edit stok ajax
+        Route::put('/stok/{id}/update_ajax', [StokController::class, 'update_ajax']); // menyimpan perubahan data stok ajax
+        Route::get('/stok/{id}/confirm_ajax', [StokController::class, 'confirm_ajax']); // untuk tampilan form confirm delete stok ajax
+        Route::delete('/stok/{id}/delete_ajax', [StokController::class, 'delete_ajax']); // menghapus data stok ajax
     });
 });
