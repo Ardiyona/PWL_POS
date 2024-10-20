@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\DetailPenjualanController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\StokController;
@@ -101,7 +103,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/profile/{id}/upload_ajax', [ProfileController::class, 'upload_ajax'])->name('editProfile');   // ajax import excel
     });
 
-    // Menu stok
+    // Menu stok barang
     Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
         Route::get('/stok', [StokController::class, 'index']);          // menampilkan halaman awal stok
         Route::Post('/stok/list', [StokController::class, 'list']);      // menampilkan data stok
@@ -112,5 +114,31 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/stok/{id}/update_ajax', [StokController::class, 'update_ajax']); // menyimpan perubahan data stok ajax
         Route::get('/stok/{id}/confirm_ajax', [StokController::class, 'confirm_ajax']); // untuk tampilan form confirm delete stok ajax
         Route::delete('/stok/{id}/delete_ajax', [StokController::class, 'delete_ajax']); // menghapus data stok ajax
+    });
+
+    // Menu transaksi penjualan
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+        Route::get('/penjualan', [PenjualanController::class, 'index']);          // menampilkan halaman awal penjualan
+        Route::Post('/penjualan/list', [PenjualanController::class, 'list']);      // menampilkan data penjualan
+        Route::get('/penjualan/create_ajax', [PenjualanController::class, 'create_ajax']); // menampilkan halaman form tambah penjualan ajax
+        Route::post('penjualan/ajax', [PenjualanController::class, 'store_ajax']);        // menyimpan data penjualan baru ajax
+        Route::get('/penjualan/{id}/show_ajax', [PenjualanController::class, 'show_ajax']);    // menampilkan halaman awal penjualan ajax
+        Route::get('/penjualan/{id}/edit_ajax', [PenjualanController::class, 'edit_ajax']);     // menampilkan halaman form edit penjualan ajax
+        Route::put('/penjualan/{id}/update_ajax', [PenjualanController::class, 'update_ajax']); // menyimpan perubahan data penjualan ajax
+        Route::get('/penjualan/{id}/confirm_ajax', [PenjualanController::class, 'confirm_ajax']); // untuk tampilan form confirm delete penjualan ajax
+        Route::delete('/penjualan/{id}/delete_ajax', [PenjualanController::class, 'delete_ajax']); // menghapus data penjualan ajax
+    });
+
+    // Menu transaksi penjualan
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+        Route::get('/detail', [DetailPenjualanController::class, 'index']);          // menampilkan halaman awal detail
+        Route::Post('/detail/list', [DetailPenjualanController::class, 'list']);      // menampilkan data detail
+        Route::get('/detail/create_ajax', [DetailPenjualanController::class, 'create_ajax']); // menampilkan halaman form tambah detail ajax
+        Route::post('detail/ajax', [DetailPenjualanController::class, 'store_ajax']);        // menyimpan data detail baru ajax
+        Route::get('/detail/{id}/show_ajax', [DetailPenjualanController::class, 'show_ajax']);    // menampilkan halaman awal detail ajax
+        Route::get('/detail/{id}/edit_ajax', [DetailPenjualanController::class, 'edit_ajax']);     // menampilkan halaman form edit detail ajax
+        Route::put('/detail/{id}/update_ajax', [DetailPenjualanController::class, 'update_ajax']); // menyimpan perubahan data detail ajax
+        Route::get('/detail/{id}/confirm_ajax', [DetailPenjualanController::class, 'confirm_ajax']); // untuk tampilan form confirm delete detail ajax
+        Route::delete('/detail/{id}/delete_ajax', [DetailPenjualanController::class, 'delete_ajax']); // menghapus data detail ajax
     });
 });
