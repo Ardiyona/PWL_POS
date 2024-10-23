@@ -5,7 +5,14 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <button onclick="modalAction('{{ url('/detail/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
+                <button onclick="modalAction('{{ url('/detail/import') }}')" class="btn btn-info">Import Detail
+                    Penjualan</button>
+                <a href="{{ url('/detail/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export
+                    Detail Penjualan</a>
+                <a href="{{ url('/detail/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export
+                    Detail Penjualan</a>
+                <button onclick="modalAction('{{ url('/detail/create_ajax') }}')" class="btn btn-success">Tambah
+                    Ajax</button>
             </div>
         </div>
         <div class="card-body">
@@ -26,8 +33,17 @@
                         <div class="col-3">
                             <select name="penjualan_id" id="penjualan_id" class="form-control" required>
                                 <option value="">- Semua -</option>
-                                @foreach ($penjualan as $l)
+                                @foreach ($penjualans as $l)
+                                @if ($penjualan != null)
+                                    @if ($penjualan->penjualan_id == $l->penjualan_id)
+                                    <option value="{{ $l->penjualan_id }}" selected>{{ $l->penjualan_kode }}</option>
+                                    @else
                                     <option value="{{ $l->penjualan_id }}">{{ $l->penjualan_kode }}</option>
+                                    @endif
+                                @else
+                                <option value="{{ $l->penjualan_id }}">{{ $l->penjualan_kode }}</option>
+                                @endif
+                                    {{-- <option value="{{ $l->penjualan_id }}">{{ $l->penjualan_kode }}</option> --}}
                                 @endforeach
                             </select>
                             <small class="form-text text-muted">Kode Penjualan</small>
@@ -49,7 +65,8 @@
             </table>
         </div>
     </div>
-    <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
+    <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static"
+        data-keyboard="false" data-width="75%" aria-hidden="true"></div>
 @endsection
 
 @push('css')
@@ -96,8 +113,12 @@
                 }, {
                     data: "harga",
                     ClassName: "",
+                    width: "10%",
                     orderable: true,
-                    searchable: false
+                    searchable: false,
+                    render: function(data, type, row) {
+                        return new Intl.NumberFormat('id-ID').format(data);
+                    }
                 }, {
                     data: "jumlah",
                     ClassName: "",

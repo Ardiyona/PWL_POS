@@ -1,48 +1,23 @@
-<form action="{{ url('/profile/' . $user->user_id . '/upload_ajax') }}" method="POST" id="form-import"
-    enctype="multipart/form-data">
+<form action="{{ url('/kategori/import_ajax') }}" method="POST" id="form-import" enctype="multipart/form-data">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Import Data Kategori</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <div class="form-group" style="display: none">
-                    <label>Level Pengguna</label>
-                    <select name="level_id" id="level_id" class="form-control" required>
-                        <option value="">- Pilih Level -</option>
-                        @foreach ($level as $l)
-                            <option {{ $l->level_id == $user->level_id ? 'selected' : '' }} value="{{ $l->level_id }}">
-                                {{ $l->level_nama }}</option>
-                        @endforeach
-                    </select>
-                    <small id="error-level_id" class="error-text form-text text-danger"></small>
+                <div class="form-group">
+                    <label>Download Template</label>
+                    <a href="{{ asset('template_kategori.xlsx') }}" class="btn btn-info btn-sm" download><i
+                            class="fa fa-file-excel"></i>Download</a>
+                    <small id="error-kategori_id" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
-                    <label>Username</label>
-                    <input value="{{ $user->username }}" type="text" name="username" id="username"
-                        class="form-control" required>
-                    <small id="error-username" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Nama</label>
-                    <input value="{{ $user->nama }}" type="text" name="nama" id="nama" class="form-control"
-                        required>
-                    <small id="error-nama" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input value="" type="password" name="password" id="password" class="form-control">
-                    <small class="form-text text-muted">Abaikan jika tidak ingin ubah
-                        password</small>
-                    <small id="error-password" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Foto</label>
-                    <input type="file" name="foto" id="foto" class="form-control">
-                    <small id="error-foto" class="error-text form-text text-danger"></small>
+                    <label>Pilih File</label>
+                    <input type="file" name="file_kategori" id="file_kategori" class="form-control">
+                    <small id="error-file_kategori" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -56,28 +31,10 @@
     $(document).ready(function() {
         $("#form-import").validate({
             rules: {
-
-                level_id: {
+                file_kategori: {
                     required: true,
-                    number: true
+                    extension: "xlsx"
                 },
-                username: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 20
-                },
-                nama: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 100
-                },
-                password: {
-                    minlength: 6,
-                    maxlength: 20
-                },
-                foto: {
-                    extension: ["jpeg", "jpg", "png"]
-                }
             },
             submitHandler: function(form) {
                 var formData = new FormData(form); // Jadikan form ke FormData untuk menghandle file
@@ -94,9 +51,8 @@
                                 icon: 'success',
                                 title: 'Berhasil',
                                 text: response.message
-                            }).then(function() {
-                                window.location = response.redirect;
                             });
+                            tableKategori.ajax.reload(); // reload datatable
                         } else { // jika error
                             $('.error-text').text('');
                             $.each(response.msgField, function(prefix, val) {

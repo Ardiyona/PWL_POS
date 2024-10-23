@@ -23,11 +23,15 @@ class BarangController extends Controller
             'title' => 'Data Barang',
             'list' => ['Home', 'Barang']
         ];
-        $kategori = KategoriModel::select('kategori_id', 'kategori_nama')->get();
+        $page = (object)[
+            'title' => 'Daftar barang yang terdaftar dalam sistem'
+        ];
+        $kategori = KategoriModel::all();
         return view('barang.index', [
             'activeMenu' => $activeMenu,
             'breadcrumb' => $breadcrumb,
-            'kategori' => $kategori
+            'kategori' => $kategori,
+            'page' => $page
         ]);
     }
 
@@ -423,6 +427,7 @@ class BarangController extends Controller
         $writer->save('php://output');
         exit;
     }
+    
     public function export_pdf()
     {
         $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')

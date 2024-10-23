@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BarangModel;
+use App\Models\DetailPenjualanModel;
 use App\Models\StokModel;
 use App\Models\SupplierModel;
 use App\Models\UserModel;
@@ -10,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StokController extends Controller
 {
@@ -110,14 +113,16 @@ class StokController extends Controller
     }
 
     // Menampilkan detail stok barang ajax
-    public function show_ajax(String $id) {
+    public function show_ajax(String $id)
+    {
         $stok = StokModel::with('supplier', 'barang', 'user')->find($id);
-    
+
         return view('stok.show_ajax', ['stok' => $stok]);
     }
 
     // Menampilkan halaman form edit stok barang ajax
-    public function edit_ajax(String $id) {
+    public function edit_ajax(String $id)
+    {
         $stok = StokModel::find($id);
         $supplier = SupplierModel::select('supplier_id', 'supplier_nama')->get();
         $barang = BarangModel::select('barang_id', 'barang_nama')->get();
@@ -126,9 +131,10 @@ class StokController extends Controller
         return view('stok.edit_ajax', ['stok' => $stok, 'supplier' => $supplier,  'barang' => $barang,  'user' => $user]);
     }
 
-    
+
     // Menyimpan perubahan data stok barang ajax
-    public function update_ajax(Request $request, $id){
+    public function update_ajax(Request $request, $id)
+    {
         // cek apakah request dari ajax
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
@@ -154,7 +160,7 @@ class StokController extends Controller
                     'status' => true,
                     'message' => 'Data berhasil diupdate'
                 ]);
-            } else{
+            } else {
                 return response()->json([
                     'status' => false,
                     'message' => 'Data tidak ditemukan'
@@ -165,14 +171,16 @@ class StokController extends Controller
     }
 
     // Menampilkan hapus data stok ajax
-    public function confirm_ajax(string $id) {
+    public function confirm_ajax(string $id)
+    {
         $stok = StokModel::find($id);
-        
+
         return view('stok.confirm_ajax', ['stok' => $stok]);
     }
 
     // Menghapus data stok ajax
-    public function delete_ajax(Request $request, $id) {
+    public function delete_ajax(Request $request, $id)
+    {
         // cek apakah request dari ajax
         if ($request->ajax() || $request->wantsJson()) {
             $stok = StokModel::find($id);
@@ -190,5 +198,133 @@ class StokController extends Controller
             }
         }
         return redirect('/');
+    }
+
+    public function export_excel()
+    {
+        // ambil data barang yang akan diexport
+        $stok = StokModel::select('supplier_id', 'barang_id', 'user_id', 'stok_tanggal', 'stok_jumlah')
+            ->orderBy('supplier_id')
+            ->with('supplier', 'user', 'barang')
+            ->get();
+
+        // load library excel
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();    // ambil data yang aktif
+
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Supplier');
+        $sheet->setCellValue('C1', 'Nama Barang');
+        $sheet->setCellValue('D1', 'Nama Pengguna');
+        $sheet->setCellValue('E1', 'Tanggal Stok');
+        $sheet->setCellValue('F1', 'Jumlah Stok');
+
+        $sheet->getStyle('A1:F1')->getFont()->setBold(true);    // bold header
+
+        $no = 1;        // nomor data dimulai dari 1
+        $baris = 2;     // baris data dimulai dari baris ke 2
+        foreach ($stok as $key => $value) {
+            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('B' . $baris, $value->supplier->supplier_nama);
+            $sheet->setCellValue('C' . $baris, $value->barang->barang_nama);
+            $sheet->setCellValue('D' . $baris, $value->user->nama);
+            $sheet->setCellValue('E' . $baris, $value->stok_tanggal);
+            $sheet->setCellValue('F' . $baris, $value->stok_jumlah);  // ambil nama kategori
+            $baris++;
+            $no++;
+        }
+
+        foreach (range('A', 'F') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);   // set auto size untuk kolom
+        }
+
+        $sheet->setTitle('Data Stok');    // set title sheet
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Data Stok' . date('Y-m-d H:i:s') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        header('Cache-Control: max-age=1');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last-Modified:' . gmdate('D, d M Y H:i:s') . ' GMT');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function export_pdf()
+    {
+        // ambil data barang yang akan diexport
+        $stok = StokModel::select('supplier_id', 'barang_id', 'user_id', 'stok_tanggal', 'stok_jumlah')
+            ->orderBy('supplier_id')
+            ->orderBy('barang_id')
+            ->with('supplier', 'user', 'barang')
+            ->get();
+
+        $pdf = Pdf::loadView('stok.export_pdf', ['stok' => $stok]);
+        $pdf->setPaper('a4', 'portrait'); // set ukuran kertas dan orientasi
+        $pdf->setOption("isRemoteEnabled", true); // set true jika ada gambar dari url $pdf->render();
+        return $pdf->stream('Data Stok' . date('Y-m-d H:i:s') . '.pdf');
+    }
+
+    public function import()
+    {
+        return view('stok.import');
+    }
+
+    public function import_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                // validasi file harus xls atau xlsx, max 1MB
+                'file_stok' => ['required', 'mimes:xlsx', 'max:1024']
+            ];
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+            $file = $request->file('file_stok'); // ambil file dari request
+            $reader = IOFactory::createReader('Xlsx'); // load reader file excel
+            $reader->setReadDataOnly(true); // hanya membaca data
+            $spreadsheet = $reader->load($file->getRealPath()); // load file excel
+            $sheet = $spreadsheet->getActiveSheet(); // ambil sheet yang aktif
+            $data = $sheet->toArray(null, false, true, true); // ambil data excel
+            $insert = [];
+            if (count($data) > 1) { // jika data lebih dari 1 baris
+                foreach ($data as $baris => $value) {
+                    if ($baris > 1) { // baris ke 1 adalah header, maka lewati
+                        $insert[] = [
+                            'supplier_id' => $value['A'],
+                            'barang_id' => $value['B'],
+                            'user_id' => $value['C'],
+                            'stok_tanggal' => $value['D'],
+                            'stok_jumlah' => $value['E'],
+                            'created_at' => now(),
+                        ];
+                    }
+                }
+                if (count($insert) > 0) {
+                    // insert data ke database, jika data sudah ada, maka diabaikan
+                    StokModel::insertOrIgnore($insert);
+                }
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil diimport'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Tidak ada data yang diimport'
+                ]);
+            }
+        }
+        return redirect('/stok');
     }
 }

@@ -48,8 +48,8 @@
                     </table>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default">Kembali</button>
-                <button type="button" onclick="modalAction('{{ url('/detail') }}')" class="btn btn-info btn-sm">Detail Transaksi Penjualan</button>
+                <button type="button" data-dismiss="modal" class="btn btn-default btn-sm">Kembali</button>
+                <a href="{{ url('/detail/'.$penjualan->penjualan_id ) }}" class="btn btn-info btn-sm">Detail Transaksi Penjualan</a>
             </div>
         </div>
     </div>

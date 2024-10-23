@@ -1,8 +1,8 @@
 <div class="sidebar">
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        {{-- <div class="image">
-            <img src="{{ Auth::user()->foto->asset('storage/images/'.$user->foto) }}" class="img-circle elevation-2" alt="User Image">
-        </div> --}}
+        <div class="image">
+            <img src="{{ auth()->user()->foto ? asset('storage/images/' . auth()->user()->foto) : asset('default-avatar.png') }}" class="img-circle elevation-2" alt="User Image">
+        </div>
         <div class="info">
             <a href="{{ url('profile') }}" class="d-block">{{ Auth::user()->nama }}</a>
         </div>

@@ -49,7 +49,7 @@ class ProfileController extends Controller
                 'username' => 'required|max:20|unique:m_user,username,'.$id.',user_id',
                 'nama' => 'required|max:100',
                 'password' => 'nullable|min:6|max:20',
-                'foto' => 'nullable|mimes:jpeg|max:102400',
+                'foto' => 'nullable|mimes:jpeg,jpg,png|max:102400',
             ];
     
             $validator = Validator::make($request->all(), $rules);

@@ -31,18 +31,13 @@
                 <div class="form-group">
                     <label>Nama Pengguna</label>
                     <select name="user_id" id="user_id" class="form-control" required>
-                        <option value="">- Pilih user_id Pengguna -</option>
+                        <option value="">- Pilih Nama Pengguna -</option>
                         @foreach ($user as $l)
                             <option value="{{ $l->user_id }}">{{ $l->nama }}</option>
                         @endforeach
                     </select>
                     <small id="error-user_id" class="error-text form-text text-danger"></small>
                 </div>
-                {{-- <div class="form-group">
-                    <label>Nama Pengguna</label>
-                    <input value="{{ Auth::user()->nama }}" type="text" name="user_id" id="user_id" class="form-control" required readonly>
-                    <small id="error-user_id" class="error-text form-text text-danger"></small>
-                </div> --}}
                 <div class="form-group">
                     <label>Tanggal Stok</label>
                     <input value="" type="date" name="stok_tanggal" id="stok_tanggal" class="form-control" required>
