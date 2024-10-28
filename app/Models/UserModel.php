@@ -7,10 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Yajra\DataTables\Html\Editor\Fields\Hidden;
 use Illuminate\Foundation\Auth\User as Authenticable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class UserModel extends Authenticable
+class UserModel extends Authenticable implements JWTSubject
 {
     use HasFactory;
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return[];
+    }
 
     protected $table = 'm_user';        // Mendefinisikan nama tabel yang digunakan oleh model ini
     protected $primaryKey = 'user_id';  // Mendefinisikan primary key dari tabel yang digunakan
