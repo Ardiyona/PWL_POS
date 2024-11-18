@@ -59,6 +59,7 @@
                         <th>Nama Barang</th>
                         <th>Harga</th>
                         <th>Jumlah</th>
+                        <th>Image</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -113,7 +114,7 @@
                 }, {
                     data: "harga",
                     ClassName: "",
-                    width: "10%",
+                    width: "9%",
                     orderable: true,
                     searchable: false,
                     render: function(data, type, row) {
@@ -122,8 +123,15 @@
                 }, {
                     data: "jumlah",
                     ClassName: "",
+                    width: "6%",
                     orderable: true,
                     searchable: false
+                }, {
+                    data: "barang.image",
+                    ClassName: "",
+                    width: "15%",
+                    orderable: false,
+                    searchable: true
                 }, {
                     data: "aksi",
                     ClassName: "",

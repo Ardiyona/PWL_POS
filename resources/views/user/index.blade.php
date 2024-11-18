@@ -45,6 +45,7 @@
                         <th>Userename</th>
                         <th>Nama</th>
                         <th>Level Pengguna</th>
+                        <th>Image</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -99,6 +100,11 @@
                     searchable: true
                 }, {
                     data: "level.level_nama",
+                    ClassName: "",
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: "image",
                     ClassName: "",
                     orderable: false,
                     searchable: false

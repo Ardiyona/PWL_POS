@@ -38,7 +38,7 @@ class BarangController extends Controller
     // Ambil data barang dalam bentuk json untuk datables
     public function list(Request $request)
     {
-        $barangs = BarangModel::select('barang_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual', 'kategori_id')
+        $barangs = BarangModel::select('barang_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual', 'kategori_id', 'image')
             ->with('kategori');
 
         //Filter data barang berdasarkan kategori_id
@@ -93,7 +93,7 @@ class BarangController extends Controller
             'barang_nama'   => 'required|string|max:100',   // barang_nama harus diisi, berupa string, dan maksimal 100 karakter
             'harga_beli'    => 'required|integer',            // password harus diisi dan berupa angka
             'harga_jual'    => 'required|integer',            // password harus diisi dan berupa angka
-            'kategori_id'   => 'required|integer'           // kategori_id harus diisi dan berupa angka
+            'kategori_id'   => 'required|integer',           // kategori_id harus diisi dan berupa angka
         ]);
 
         BarangModel::create([

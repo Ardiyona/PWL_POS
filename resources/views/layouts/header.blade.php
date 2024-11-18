@@ -15,11 +15,7 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Logout -->
-      <li class="nav-item">
-        <a href="{{ url('logout') }}" class="nav-link" role="button">
-          <i class="fas fa-sign-out-alt"></i>
-        </a>
-      </li>
+c
 
       <!-- Navbar Search -->
       <li class="nav-item">
